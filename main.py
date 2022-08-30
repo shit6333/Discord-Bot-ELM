@@ -12,7 +12,7 @@ intents.members = True
 activity = discord.Activity(type=discord.ActivityType.watching, name="\"兔田佩克拉\"直播")
 client = discord.Client( intents = intents,  activity=activity)
 
-# 啟動 client(bot)
+# 啟動 client
 @client.event
 async def on_ready():
     print('I am >< ', client.user)
@@ -39,53 +39,24 @@ async def on_message(message):
       await message.add_reaction('\U0001F4B5')
       return
   
-    # 限制 bot 發出 & 回應訊息的 channel
-    channels = ['bot-test']
-    if str(message.channel) in channels:
+    # 設定 發出訊息的 channel (bot-test)
+    # channels = ['bot-test']
+    if message.content.startswith('!ELM'):
+    # if str(message.channel) in channels:
       if message.author == client.user:
           return
 
       # 指令說明:
-      elif message.content == "!ELM.help":
+      if message.content == "!ELM.help":
         await message.channel.send(
           '現有指令:\n'
-          '> !ELM你是不是在    [玩,看,聽]    [\'ELM的狀態\']  : 更改ELM狀態\n '
           '> !ELM.meme  : random meme (if not working , just try it again~ )\n '
+          '> !ELM.meow  : 吸吸吸吸吸'
           )
         return
-        
-      # 設定 bot 狀態
-      if message.content.startswith('!ELM你是不是在'):
-        x = message.content.split(" ",4)[1:]  
-        
-        if(len(x) != 2):
-          await message.channel.send(
-            'Error : 你的格式不對喔~ \n'
-            '!ELM你是不是在    [玩,看,聽]    [\'ELM的狀態\']'
-          )
-          return          
-        
-        # riptext = x[:4] + ['']*(4-len(x))
-        if(x[0] == '玩'):
-          activity = discord.Game(name=x[1])
-        elif(x[0] == '看'):
-          # print("ELM看")
-          activity = discord.Activity(type=discord.ActivityType.watching, name=x[1])
-        elif(x[0] == '聽'):
-          activity = discord.Activity(type=discord.ActivityType.listening, name=x[1])
-          # print("ELM聽")
-        else:
-          await message.channel.send(
-            'Error : 你的格式不對喔~ \n'
-            '!ELM你是不是在   [玩,看,聽]   [\'ELM的狀態\']'
-          )
-          return  
 
-        await client.change_presence(status=discord.Status.idle,             activity=activity)
-        return
-
-
-      # 機器人發出隨機 meme
+        
+      # meme
       if message.content == '!ELM.meme':
         embed = discord.Embed(title="", description="")
         async with aiohttp.ClientSession() as cs:
@@ -94,13 +65,26 @@ async def on_message(message):
             embed.set_image(url=res['data']['children'] [random.randint(0, 24)]['data']['url'])
             await message.channel.send(embed=embed)
             return
-        
-      # hi
-      if message.content.startswith('哈摟') or message.content.startswith('hi'):
-          await message.channel.send(f'嗨 {message.author.name} ~唉...我窮得只剩錢了... !!')
-          return
-      
-      # 無此指令
+
+      # meow
+      if message.content == '!ELM.meow':
+        embed = discord.Embed(title="", description="")
+        url = 'https://www.reddit.com/r/cat/new.json?sort=hot'  # 設定 url
+        # 進行爬蟲
+        async with aiohttp.ClientSession() as cs:  
+          async with cs.get(url) as r:
+            res = await r.json()  # 讀取 json 檔
+            # 抓取檔案中的 img 網址
+            img = res['data']['children'][random.randint(0, 24)]['data']['url']
+            # 確認是否為 jpg
+            while(not str(img).endswith('.jpg')):
+              img = res['data']['children'][random.randint(0, 24)]['data']['url']
+              print(img)              
+            # 發出訊息
+            embed.set_image(url=img)
+            await message.channel.send(embed=embed)
+            return
+  
       else:
         await message.channel.send(
           '沒有這個指令欸QQ\n'
@@ -133,7 +117,7 @@ async def on_raw_reaction_add( payload ):
       guild = client.get_guild(payload.guild_id)  # 獲得伺服器
       role = guild.get_role(1010029791589716048)  # 取得身分組 
       await payload.member.add_roles(role)        # 設定身分組
-      await payload.member.send(f"你現在是 {guild.name} 的 [{role}] 啦!!")  # 私訊告知身分組訊息  
+      await payload.member.send(f"你現在是 {guild.name} 的 [{role}] 啦!!")  # 私訊  
 
     # 宗師
     if str(payload.emoji) == '🧙‍♂️' :
@@ -166,7 +150,7 @@ async def on_raw_reaction_remove( payload ):
       member = guild.get_member( payload.user_id )  # 取得移除人的身分
       role = guild.get_role(1010029791589716048)  # 取得身分組 
       await member.remove_roles(role)     # 設定身分組
-      await member.send(f"你取消成為 {guild.name} 的 [{role}] 了喔 TT")  # 私訊
+      await member.send(f"你取消成為 {guild.name} 的 [{role}] 了喔 TT")  # 私訊  
 
     # 宗師
     if str(payload.emoji) == '🧙‍♂️' :
@@ -184,7 +168,7 @@ async def on_raw_reaction_remove( payload ):
       member = guild.get_member( payload.user_id )  # 取得移除人的身分
       role = guild.get_role(1010031067048190082)  # 取得身分組 
       await member.remove_roles(role)     # 設定身分組
-      await member.send(f"你取消成為 {guild.name} 的 [{role}] 了喔 TT")  # 私訊  
+      await member.send(f"你取消成為 {guild.name} 的 [{role}] 了喔 TT")  # 私訊    
 
 # ==========================================================================
 
