@@ -182,5 +182,5 @@ try:
   client.run(token)             # 運作機器人
 except:
   print("\n\n\nBLOCKED BY RATE LIMITS\nRESTARTING NOW\n\n\n") 
-  os.system("restarter.py")     # 連到另一文件，重啟此 main.py
+  os.system("python restarter.py")       # 連到另一文件，重啟此 main.py
   os.system("kill 1")           # 殺死進程
