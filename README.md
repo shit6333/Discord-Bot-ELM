@@ -25,3 +25,5 @@
 如果要自訂義一個 bot 的功能，只要更改有 @client.event 的函數即可<br>
 開頭即尾端視情況進行修改，那邊主要是設定權限、使 bot 活著 <br>
 更多指令介紹可參見 [discord.py](https://discordpy.readthedocs.io/en/stable/index.html)
+------------2022/9/6 更新 ---------------
+不知道為什麼 Replit 容易斷線，最後換一個每月 1 鎂的 host 了 ( 無須 keep_alive )
