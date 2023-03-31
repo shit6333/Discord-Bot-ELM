@@ -10,8 +10,8 @@
 - 有人加入 dc 伺服器時會打招呼
 - 利用 "reaction role name" ( 點選 emoji ) 方式選擇身分組
 - 簡單對話
-- 隨機發送 meme (來源url: 'https://www.reddit.com/r/dankmemes/new.json?sort=hot')
-- 隨機發送貓咪圖片 (來源url: 'https://www.reddit.com/r/cat/new.json?sort=hot')
+- 隨機發送 meme (來源url: 'https://www.reddit.com/r/dankmemes/')
+- 隨機發送貓咪圖片 (來源url: 'https://www.reddit.com/r/cat/')
 <br>
 
 ## 2. 文件說明
